@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../GroqChat.css";
 const Groq = require("groq-sdk");
 const groq = new Groq({
-  apiKey: "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",
+  apiKey: process.env.REACT_APP_GROQ_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
@@ -36,7 +36,6 @@ export default function GroqChat() {
     }
     setLoading(false);
   };
-
   return (
     <div className="chat-container">
       <div className="chat-box">

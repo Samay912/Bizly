@@ -7,14 +7,17 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState(18);
+  const [role, setRole] = useState("");
+  const [startupExperience, setStartupExperience] = useState(""); // New state for dropdown
+
   const navigate = useNavigate();
   const { signup } = useContext(AuthContext);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await signup(name, age, email, password);
-      navigate("/login");
+      await signup(name, age, role, startupExperience, email, password);
+      navigate("/dashboard");
     } catch (error) {
       alert("Signup failed");
     }
@@ -38,6 +41,30 @@ const SignupPage = () => {
           onChange={(e) => setAge(e.target.value)}
           style={styles.input}
         />
+        <h3>Role</h3>
+        <input
+          type="text"
+          placeholder="Developer, Business Strategist, Designer, etc"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          style={styles.input}
+        />
+
+        {/* Startup Experience Dropdown */}
+        <h3>Startup Experience</h3>
+        <select
+          value={startupExperience}
+          onChange={(e) => setStartupExperience(e.target.value)}
+          style={styles.select}
+        >
+          <option value="" disabled>
+            Select your experience
+          </option>
+          <option value="Newbie">Newbie</option>
+          <option value="Been here before">Been here before</option>
+          <option value="Veteran Hustler">Veteran Hustler</option>
+        </select>
+
         <input
           type="email"
           placeholder="Email"
@@ -74,6 +101,12 @@ const styles = {
     margin: "10px 0",
     padding: "10px",
     width: "250px",
+  },
+  select: {
+    display: "block",
+    margin: "10px 0",
+    padding: "10px",
+    width: "270px",
   },
   button: {
     padding: "10px 20px",

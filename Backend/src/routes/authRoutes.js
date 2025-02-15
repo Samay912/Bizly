@@ -6,7 +6,7 @@ const router = express.Router();
 // Signup Route
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, age, password } = req.body;
+    const { name, age, email, password, startupExperience, role } = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -15,9 +15,18 @@ router.post("/signup", async (req, res) => {
     }
 
     // Create a new user
-    const user = new User({ name, email, age, password });
+    const user = new User({
+      name,
+      age,
+      email,
+      password,
+      startupExperience,
+      role,
+    });
     await user.save();
-    res.status(201).json({ message: "User registered successfully" });
+    res
+      .status(201)
+      .json({ message: "User registered successfully", user: user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

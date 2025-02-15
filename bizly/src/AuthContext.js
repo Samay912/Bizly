@@ -23,7 +23,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Signup function
-  const signup = async (name, age, email, password) => {
+  const signup = async (
+    name,
+    age,
+    role,
+    startupExperience,
+    email,
+    password
+  ) => {
     const base = "http://127.0.0.1:8080/api/auth";
     try {
       const response = await axios.post(`${base}/signup`, {
@@ -31,6 +38,8 @@ export const AuthProvider = ({ children }) => {
         age,
         email,
         password,
+        startupExperience,
+        role,
       });
       setIsLoggedIn(true);
       setUser(response.data.user); // Assuming the backend returns user data

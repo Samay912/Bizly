@@ -17,7 +17,7 @@ const SignupPage = () => {
     e.preventDefault();
     try {
       await signup(name, age, role, startupExperience, email, password);
-      navigate("/dashboard");
+      navigate("/startdesc");
     } catch (error) {
       alert("Signup failed");
     }

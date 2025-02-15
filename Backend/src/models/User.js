@@ -28,6 +28,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    headaches: {
+      type: [String],
+      default: [],
+    },
+    startupDescription: {
+      type: String,
+      default: "",
+    },
+    startupPosition: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true } // Adds createdAt and updatedAt fields
 );

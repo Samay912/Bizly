@@ -1,21 +1,75 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
+import axios from "axios";
 
 const Dashboard = () => {
-  const { logout, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const [roadmap, setRoadmap] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    logout();
+  useEffect(() => {
+    if (user) {
+      fetchRoadmap();
+    }
+  }, [user]);
+
+  const fetchRoadmap = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8080/api/startup/generate-roadmap",
+        {
+          startup_description: user.startupDescription,
+          startup_phase: user.startupPosition,
+          challenges_list: user.headaches,
+        }
+      );
+
+      setRoadmap(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching roadmap:", error);
+      setLoading(false);
+    }
   };
 
   return (
     <div style={styles.container}>
-      <h2>Dashboard</h2>
-      <p>Welcome, {user?.email || "User"}!</p>
-      <p>Welcome to your AI-powered startup assistant!</p>
-      <button onClick={handleLogout} style={styles.button}>
-        Logout
-      </button>
+      <h1>Welcome, {user?.name}!</h1>
+      <h2>Startup Roadmap</h2>
+
+      {loading ? (
+        <p>Generating your roadmap...</p>
+      ) : (
+        <>
+          <h3>To-Do List</h3>
+          {roadmap?.["To-Do List"] ? (
+            Object.entries(roadmap["To-Do List"]).map(([category, tasks]) => (
+              <div key={category} style={styles.category}>
+                <h4>{category}</h4>
+                <ul>
+                  {tasks.map((task, index) => (
+                    <li key={index}>
+                      <strong>
+                        {task.task} ({task.priority})
+                      </strong>
+                      : {task.description}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <p>No tasks generated.</p>
+          )}
+
+          <h3>Done List</h3>
+          <ul>
+            {roadmap?.["Done List"]?.map((item, index) => (
+              <li key={index}>{item}</li>
+            )) || <p>No completed tasks.</p>}
+          </ul>
+        </>
+      )}
     </div>
   );
 };
@@ -23,12 +77,11 @@ const Dashboard = () => {
 const styles = {
   container: {
     textAlign: "center",
-    marginTop: "100px",
+    marginTop: "50px",
   },
-  button: {
-    padding: "10px 20px",
-    fontSize: "16px",
-    cursor: "pointer",
+  category: {
+    textAlign: "left",
+    marginBottom: "20px",
   },
 };
 

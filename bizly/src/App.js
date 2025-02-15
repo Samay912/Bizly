@@ -10,6 +10,7 @@ import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import Dashboard from "./components/Dashboard";
 import { AuthContext } from "./AuthContext";
+import StartDesc from "./components/StartDesc";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -20,7 +21,12 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        {/* <Route path="/startdesc" element={<StartDesc />} /> */}
         {/* Protect the dashboard route */}
+        <Route
+          path="/startdesc"
+          element={isLoggedIn ? <StartDesc /> : <Navigate to="/login" />}
+        />
         <Route
           path="/dashboard"
           element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}

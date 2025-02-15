@@ -9,6 +9,22 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+  const startdesc = async (email, desc, pos, headache) => {
+    const base = "http://127.0.0.1:8080/api/user";
+    try {
+      const response = await axios.put(`${base}/startdesc`, {
+        user: { email },
+        desc,
+        pos,
+        headache,
+      });
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("StartDesc failed", error);
+      throw error;
+    }
+  };
+
   // Login function
   const login = async (email, password) => {
     const base = "http://127.0.0.1:8080/api/auth";
@@ -56,7 +72,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, signup, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, user, login, signup, logout, startdesc }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -5,19 +5,26 @@ import { AuthContext } from "../AuthContext";
 const StartDesc = () => {
   const [desc, setDesc] = useState("");
   const [pos, setPos] = useState("");
-  const [headache, setHeadache] = useState("");
+  const [headache, setHeadache] = useState([]);
 
   const navigate = useNavigate();
-  const { startdesc } = useContext(AuthContext);
+  const { startdesc, user } = useContext(AuthContext);
 
   const handleStartDesc = async (e) => {
     e.preventDefault();
     try {
-      await startdesc(desc);
+      await startdesc(user.email, desc, pos, headache);
       navigate("/dashboard");
     } catch (error) {
       alert("Signup failed");
     }
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    setHeadache((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
   };
 
   return (
@@ -31,7 +38,7 @@ const StartDesc = () => {
           onChange={(e) => setDesc(e.target.value)}
           style={styles.input}
         />
-        <h3>Startup Position</h3>
+        <h3>Where's your startup journey at ?</h3>
         <select
           value={pos}
           onChange={(e) => setPos(e.target.value)}
@@ -40,17 +47,53 @@ const StartDesc = () => {
           <option value="" disabled>
             Select your position
           </option>
-          <option value="Newbie">New</option>
-          <option value="Been here before">Old</option>
-          <option value="Veteran Hustler">Very Old</option>
+          <option value="Ideation & Validation">Ideation & Validation</option>
+          <option value="Execution & Growth">Execution & Growth</option>
+          <option value="Market & Scaling">Market & Scaling</option>
         </select>
-        <textarea
-          type="text"
-          placeholder="What is your headache right now?"
-          value={headache}
-          onChange={(e) => setHeadache(e.target.value)}
-          style={styles.input}
-        />
+        <h3>What's your biggest headache right now?</h3>
+        <div style={styles.checkboxContainer}>
+          <label>
+            <input
+              type="checkbox"
+              value="Finding Investors"
+              onChange={handleCheckboxChange}
+            />
+            Finding Investors
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Building a Team"
+              onChange={handleCheckboxChange}
+            />
+            Building a Team
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Market Research"
+              onChange={handleCheckboxChange}
+            />
+            Market Research
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Launching MVP"
+              onChange={handleCheckboxChange}
+            />
+            Launching MVP
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Getting First Customers"
+              onChange={handleCheckboxChange}
+            />
+            Getting First Customers
+          </label>
+        </div>
         <button type="submit" style={styles.button}>
           Submit
         </button>
@@ -80,6 +123,11 @@ const styles = {
     padding: "10px",
     width: "270px",
   },
+  checkboxContainer: {
+    display: "flex",
+    flexDirection: "column",
+    margin: "10px 0",
+  },
   button: {
     padding: "10px 20px",
     fontSize: "16px",
@@ -87,4 +135,4 @@ const styles = {
   },
 };
 
-export default SignupPage;
+export default StartDesc;

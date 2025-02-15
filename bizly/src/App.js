@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,9 +9,10 @@ import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import Dashboard from "./components/Dashboard";
+import { AuthContext } from "./AuthContext";
 
 const App = () => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <Router>

@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Here you would typically make an API call to authenticate the user
-    // For now, we'll just simulate a successful login
-    if (email === "test@example.com" && password === "password") {
-      localStorage.setItem("isLoggedIn", "true");
+    try {
+      await login(email, password);
       navigate("/dashboard");
-    } else {
+    } catch (error) {
       alert("Invalid credentials");
     }
   };

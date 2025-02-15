@@ -1,17 +1,17 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { AuthContext } from "../AuthContext";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const { logout, user } = useContext(AuthContext);
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    navigate("/");
+    logout();
   };
 
   return (
     <div style={styles.container}>
       <h2>Dashboard</h2>
+      <p>Welcome, {user?.email || "User"}!</p>
       <p>Welcome to your AI-powered startup assistant!</p>
       <button onClick={handleLogout} style={styles.button}>
         Logout

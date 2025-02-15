@@ -1,12 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [roadmap, setRoadmap] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
+  const handleChat = async (e) => {
+    e.preventDefault();
+
+    navigate("/chat");
+  };
   useEffect(() => {
     if (user) {
       fetchRoadmap();
@@ -15,16 +22,16 @@ const Dashboard = () => {
 
   const fetchRoadmap = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8080/api/startup/generate-roadmap",
-        {
-          startup_description: user.startupDescription,
-          startup_phase: user.startupPosition,
-          challenges_list: user.headaches,
-        }
-      );
+      // const response = await axios.post(
+      //   "http://127.0.0.1:8080/api/startup/generate-roadmap",
+      //   {
+      //     startup_description: user.startupDescription,
+      //     startup_phase: user.startupPosition,
+      //     challenges_list: user.headaches,
+      //   }
+      // );
 
-      setRoadmap(response.data);
+      setRoadmap(user.roadMap);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching roadmap:", error);
@@ -70,6 +77,12 @@ const Dashboard = () => {
           </ul>
         </>
       )}
+      <button onClick={logout} style={styles.button}>
+        Logout
+      </button>
+      <button onClick={handleChat} style={styles.button}>
+        Chat
+      </button>
     </div>
   );
 };
@@ -82,6 +95,13 @@ const styles = {
   category: {
     textAlign: "left",
     marginBottom: "20px",
+  },
+  button: {
+    marginTop: "20px",
+    fontSize: "20px",
+    padding: "10px",
+    cursor: "pointer",
+    size: "20px",
   },
 };
 

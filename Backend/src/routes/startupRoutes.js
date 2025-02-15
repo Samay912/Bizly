@@ -5,10 +5,6 @@ require("dotenv").config();
 const Groq = require("groq-sdk");
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-function removeBackticks(str) {
-  return str.replace(/```json|```/g, "").trim();
-}
-
 // Route to generate structured startup roadmap
 router.post("/generate-roadmap", async (req, res) => {
   try {

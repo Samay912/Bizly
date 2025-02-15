@@ -40,8 +40,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    roadMap: {
+      type: Object,
+      default: {},
+    },
   },
-  { timestamps: true } // Adds createdAt and updatedAt fields
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

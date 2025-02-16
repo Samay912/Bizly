@@ -5,50 +5,39 @@ require("dotenv").config();
 const Groq = require("groq-sdk");
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-// Route to generate structured startup roadmap
-router.post("/generate-roadmap", async (req, res) => {
+router.post("/generate-desc", async (req, res) => {
   try {
-    const { startup_description, startup_phase, challenges_list } = req.body;
+    const { description } = req.body;
 
     let response = await groq.chat.completions.create({
       messages: [
         {
           role: "user",
-          content: `You are an AI assistant helping solo founders create a structured *Startup Roadmap. Based on the details provided, generate a categorized **To-Do List* (tasks for the future) and a *Done List* (general categories of what may have already been completed).  
-
-        ### *Instructions:*  
-        - *Return ONLY JSON format. Do NOT include any preamble, introduction, or explanation.*  
-        - Focus on generating a *structured roadmap of tasks that the founder still needs to complete.*  
-        - Categorize To-Do tasks under the following three key startup areas:  
-          ⿡ *Product & Development*  
-          ⿢ *Business & Strategy*  
-          ⿣ *Funding & Growth*  
-        - Each task in the To-Do List must include:  
-          - *task* → A short title for the action item.  
-          - *priority* → One of ["High", "Medium", "Low"], based on its importance.  
-          - *description* → A short explanation covering:  
-            - *Why it is important*  
-            - *How the founder can approach it*  
-        - The Done List should only contain *general categories* of what may have already been completed (e.g., "Basic market research," "Initial product brainstorming").  
-        - Format the output as structured JSON.  
-        - Ensure tasks are *actionable, clear, and relevant* to the startup journey.  
-        Make sure you start the JSON object with an opening curly brace '{' and end it with a closing curly brace '}'.
-        ---  
-
-        ### *Founder's Startup Details:*  
-        - *Startup Description:* "${startup_description}"  
-        - *Current Phase:* "${startup_phase}"  
-        - *Biggest Challenges:* ${JSON.stringify(challenges_list)}  
-        `,
+          content: `Rewrite the following startup description to make it more compelling, clear, and engaging. Ensure the tone is professional yet approachable, highlighting innovation.
+          ### *Instructions:*  
+          - *Return ONLY JSON format. Do NOT include any preamble, introduction, or explanation.*
+          Requirements:
+          1. Make it concise yet impactful.
+          2. Highlight the startup's unique value proposition.
+          3. Ensure clarity and readability.
+          4. Keep the tone aligned with a professional and modern audience.
+          5. Dont change the meaning of the given description.
+          Make sure you start the JSON object with an opening curly brace '{' and end it with a closing curly brace '}'
+          give output in a single paragraph.
+          use description as the key.
+          ---
+          Original Description:
+          ${description}
+          `,
         },
       ],
 
       model: "llama-3.3-70b-versatile",
     });
 
-    const roadmap = JSON.parse(response.choices[0]?.message?.content || "{}");
-
-    res.json(roadmap);
+    const descp = JSON.parse(response.choices[0]?.message?.content || "{}");
+    console.log(descp);
+    res.json({ description: descp.description });
   } catch (error) {
     console.error("Error generating roadmap:", error.message);
     res.status(500).json({ error: "Failed to generate roadmap" });

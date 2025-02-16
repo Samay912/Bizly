@@ -12,6 +12,7 @@ import Dashboard from "./components/Dashboard";
 import { AuthContext } from "./AuthContext";
 import StartDesc from "./components/StartDesc";
 import GroqChat from "./components/Chat";
+import Market from "./components/Market";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/market" element={<Market />} />
         {/* <Route path="/startdesc" element={<StartDesc />} /> */}
         {/* Protect the dashboard route */}
         <Route

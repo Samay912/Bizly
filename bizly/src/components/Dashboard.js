@@ -14,6 +14,11 @@ const Dashboard = () => {
 
     navigate("/chat");
   };
+  const handleMarket = async (e) => {
+    e.preventDefault();
+
+    navigate("/market");
+  };
   useEffect(() => {
     if (user) {
       fetchRoadmap();
@@ -82,6 +87,9 @@ const Dashboard = () => {
       </button>
       <button onClick={handleChat} style={styles.button}>
         Chat
+      </button>
+      <button onClick={handleMarket} style={styles.button}>
+        Market
       </button>
     </div>
   );

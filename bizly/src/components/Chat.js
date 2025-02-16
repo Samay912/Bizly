@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../AuthContext";
 import "../GroqChat.css";
 const Groq = require("groq-sdk");
 const groq = new Groq({
@@ -6,9 +7,10 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true,
 });
 
-const initialSystemPrompt = "You are a helpful AI assistant. Answer concisely.";
-
 export default function GroqChat() {
+  const { user } = useContext(AuthContext);
+  const initialSystemPrompt =
+    "You are a helpful AI assistant. Answer concisely.";
   const [messages, setMessages] = useState([
     { role: "system", content: initialSystemPrompt },
   ]);

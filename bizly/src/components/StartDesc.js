@@ -26,6 +26,31 @@ const StartDesc = () => {
       checked ? [...prev, value] : prev.filter((item) => item !== value)
     );
   };
+  const handleAiUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8080/api/startup/generate-desc",
+        {
+          method: "POST", // Adjust based on your API method
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ description: desc }), // Add any necessary request body data
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch AI-generated description");
+      }
+
+      const data = await response.json();
+      setDesc(data.description);
+      alert("AI description updated successfully");
+    } catch (error) {
+      console.error("Error fetching AI description:", error);
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -38,6 +63,9 @@ const StartDesc = () => {
           onChange={(e) => setDesc(e.target.value)}
           style={styles.input}
         />
+        <button onClick={handleAiUpdate} style={styles.aiButton}>
+          Update with AI
+        </button>
         <h3>Where's your startup journey at ?</h3>
         <select
           value={pos}

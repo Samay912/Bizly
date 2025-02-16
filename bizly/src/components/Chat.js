@@ -9,7 +9,35 @@ const groq = new Groq({
 
 export default function GroqChat() {
   const { user } = useContext(AuthContext);
-  const [messages, setMessages] = useState([{ role: "system", content: `You are a helpful AI assistant. Answer concisely ${user.name}.` }]);
+  const pd0 = user.roadMap["To-Do List"]["Product & Development"][0];
+
+  const pd1 = user.roadMap["To-Do List"]["Product & Development"][1];
+
+  const pd2 = user.roadMap["To-Do List"]["Product & Development"][2];
+
+  const bs0 = user.roadMap["To-Do List"]["Business & Strategy"][0];
+
+  const bs1 = user.roadMap["To-Do List"]["Business & Strategy"][1];
+
+  const bs2 = user.roadMap["To-Do List"]["Business & Strategy"][2];
+
+  const fg0 = user.roadMap["To-Do List"]["Funding & Growth"][0];
+
+  const fg1 = user.roadMap["To-Do List"]["Funding & Growth"][1];
+
+  const fg2 = user.roadMap["To-Do List"]["Funding & Growth"][2];
+
+  const [messages, setMessages] = useState([
+
+    {
+
+      role: "system",
+
+      content: `You are a helpful AI startup assistant. Answer concisely here is a roadmap of the startup, this is a done list ${user.roadMap["Done List"]}, this is a todo list 1.Product & Development${pd0}${pd1}${pd2} 2.Business & Strategy${bs0}${bs1}${bs2} 3.Funding & Growth${fg0}${fg1}${fg2}. Dont use markdown language. Give consice answers. If asked for more details, elaborate.`,
+
+    },
+
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

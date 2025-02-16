@@ -1,0 +1,75 @@
+body {
+    background: radial-gradient(circle, #001f3f, #000814);
+    color: #00aaff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .login-box {
+    background: #002b55;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px #00aaff;
+    text-align: center;
+    width: 350px;
+  }
+  
+  .login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Field Container */
+  .input-group {
+    display: flex;
+    align-items: center;
+    background: #003b75;  /* Comment this out if you want white background */
+    background: white; /* Uncomment this to change to white */
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  /* Input Field */
+  .input-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: white;  /* Comment this out if you want black text */
+    color: black;  /* Uncomment this to change text to black */
+    font-size: 16px;
+    padding: 10px;
+    outline: none;
+  }
+  
+  .input-field::placeholder {
+    color: #99ccee;
+  }
+  
+  /* Login Button */
+  .login-button {
+    background: #00aaff;  /* Comment this out if you want orange */
+    background: orange; /*  Uncomment this to change button to orange */
+    color: white;
+    font-size: 18px;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+  }
+  
+  .login-button:hover {
+    background: #0088cc;  /* Comment this out if you want a different hover effect */
+    background: darkorange;  /* Uncomment this for orange hover */
+    box-shadow: 0px 0px 10px #00aaff;
+  }
+  

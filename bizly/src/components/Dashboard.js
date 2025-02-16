@@ -2,18 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import GroqChat from "../components/Chat"; // Import the chat component
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [roadmap, setRoadmap] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleChat = async (e) => {
-    e.preventDefault();
-
-    navigate("/chat");
-  };
   useEffect(() => {
     if (user) {
       fetchRoadmap();
@@ -22,15 +19,6 @@ const Dashboard = () => {
 
   const fetchRoadmap = async () => {
     try {
-      // const response = await axios.post(
-      //   "http://127.0.0.1:8080/api/startup/generate-roadmap",
-      //   {
-      //     startup_description: user.startupDescription,
-      //     startup_phase: user.startupPosition,
-      //     challenges_list: user.headaches,
-      //   }
-      // );
-
       setRoadmap(user.roadMap);
       setLoading(false);
     } catch (error) {
@@ -39,8 +27,24 @@ const Dashboard = () => {
     }
   };
 
+  const getMostImportantTask = () => {
+    if (!roadmap || !roadmap["To-Do List"]) return null;
+    let importantTask = null;
+    Object.values(roadmap["To-Do List"]).forEach((tasks) => {
+      tasks.forEach((task) => {
+        if (!importantTask || task.priority === "High") {
+          importantTask = task;
+        }
+      });
+    });
+    return importantTask;
+  };
+
+  const mostImportantTask = getMostImportantTask();
+
   return (
     <div style={styles.container}>
+      <button onClick={logout} style={styles.logoutButton}>Logout</button>
       <h1>Welcome, {user?.name}!</h1>
       <h2>Startup Roadmap</h2>
 
@@ -48,41 +52,25 @@ const Dashboard = () => {
         <p>Generating your roadmap...</p>
       ) : (
         <>
-          <h3>To-Do List</h3>
-          {roadmap?.["To-Do List"] ? (
-            Object.entries(roadmap["To-Do List"]).map(([category, tasks]) => (
-              <div key={category} style={styles.category}>
-                <h4>{category}</h4>
-                <ul>
-                  {tasks.map((task, index) => (
-                    <li key={index}>
-                      <strong>
-                        {task.task} ({task.priority})
-                      </strong>
-                      : {task.description}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>No tasks generated.</p>
+          {mostImportantTask && (
+            <div
+              style={styles.importantTaskBox}
+              onClick={() => navigate("/tasks")}
+            >
+              <h3>{mostImportantTask.task} ({mostImportantTask.priority})</h3>
+              <p>{mostImportantTask.description}</p>
+            </div>
           )}
-
-          <h3>Done List</h3>
-          <ul>
-            {roadmap?.["Done List"]?.map((item, index) => (
-              <li key={index}>{item}</li>
-            )) || <p>No completed tasks.</p>}
-          </ul>
         </>
       )}
-      <button onClick={logout} style={styles.button}>
-        Logout
+
+      {/* Floating Chat Button */}
+      <button onClick={() => setIsChatOpen(!isChatOpen)} style={styles.chatButton}>
+        {isChatOpen ? "✖" : "💬"}
       </button>
-      <button onClick={handleChat} style={styles.button}>
-        Chat
-      </button>
+
+      {/* Chat Box */}
+      {isChatOpen && <GroqChat />}
     </div>
   );
 };
@@ -91,17 +79,50 @@ const styles = {
   container: {
     textAlign: "center",
     marginTop: "50px",
+    position: "relative",
   },
-  category: {
-    textAlign: "left",
-    marginBottom: "20px",
-  },
-  button: {
-    marginTop: "20px",
-    fontSize: "20px",
-    padding: "10px",
+  importantTaskBox: {
+    backgroundColor: "#FFD700",
+    color: "#000",
+    padding: "20px",
+    margin: "20px auto",
+    borderRadius: "10px",
+    width: "40%",
+    minWidth: "300px",
     cursor: "pointer",
-    size: "20px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    textAlign: "center",
+    transition: "transform 0.2s",
+  },
+  logoutButton: {
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    fontSize: "16px",
+    padding: "8px 12px",
+    cursor: "pointer",
+    backgroundColor: "#ff4d4d",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+  },
+  chatButton: {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    width: "50px",
+    height: "50px",
+    borderRadius: "50%",
+    background: "#007bff",
+    color: "white",
+    border: "none",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "20px",
+    cursor: "pointer",
+    transition: "transform 0.3s ease, background 0.3s",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   },
 };
 

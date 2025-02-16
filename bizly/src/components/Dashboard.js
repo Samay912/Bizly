@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import GroqChat from "../components/Chat"; // Import the chat component
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"; // Import Recharts components
+import GroqChat from "../components/Chat"; // Import chat component
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -42,12 +43,51 @@ const Dashboard = () => {
 
   const mostImportantTask = getMostImportantTask();
 
+  // Define startup phases in order
+  const startupPhases = ["Idea", "MVP", "Launch", "Growth", "Scaling"];
+  const currentPhaseIndex = startupPhases.indexOf(user?.startupPosition);
+  const progressData = startupPhases.map((phase, index) => ({
+    phase,
+    progress: index <= currentPhaseIndex ? (index + 1) * 20 : 0, // Progress in percentage
+  }));
+
   return (
     <div style={styles.container}>
       <button onClick={logout} style={styles.logoutButton}>Logout</button>
       <h1>Welcome, {user?.name}!</h1>
-      <h2>Startup Roadmap</h2>
 
+      {/* Two separate boxes for startup details */}
+      <div style={styles.detailsContainer}>
+        <div style={styles.detailBox}>
+          <h3>Startup Description</h3>
+          <p>{user?.startupDescription || "Not available (Check API response)"}</p>
+        </div>
+
+        <div style={styles.detailBox}>
+          <h3>Current Phase</h3>
+          <p>{user?.startupPosition || "Not available (Check API response)"}</p>
+        </div>
+      </div>
+
+      {/* Market Analysis Button */}
+      <button onClick={() => navigate("/market")} style={styles.marketButton}>
+        Market Analysis
+      </button>
+
+      {/* Progress Graph */}
+      <div style={styles.progressContainer}>
+        <h3>Startup Progress</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={progressData}>
+            <XAxis dataKey="phase" />
+            <YAxis domain={[0, 100]} />
+            <Tooltip />
+            <Bar dataKey="progress" fill="#007bff" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <h2>Startup Roadmap</h2>
       {loading ? (
         <p>Generating your roadmap...</p>
       ) : (
@@ -81,8 +121,30 @@ const styles = {
     marginTop: "50px",
     position: "relative",
   },
+  detailsContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    marginTop: "20px",
+  },
+  detailBox: {
+    backgroundColor: "#f8f9fa",
+    padding: "20px",
+    borderRadius: "10px",
+    width: "30%",
+    minWidth: "250px",
+    textAlign: "center",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+  },
+  progressContainer: {
+    marginTop: "20px",
+    width: "50%",
+    minWidth: "300px",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
   importantTaskBox: {
-    backgroundColor: "#FFD700",
+    background: "linear-gradient(135deg, #FFB703, #FF8800)",
     color: "#000",
     padding: "20px",
     margin: "20px auto",
@@ -90,9 +152,13 @@ const styles = {
     width: "40%",
     minWidth: "300px",
     cursor: "pointer",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
     textAlign: "center",
-    transition: "transform 0.2s",
+    transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
+  },
+  importantTaskBoxHover: {
+    transform: "scale(1.05)",
+    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
   },
   logoutButton: {
     position: "absolute",
@@ -105,6 +171,22 @@ const styles = {
     color: "white",
     border: "none",
     borderRadius: "5px",
+  },
+  marketButton: {
+    marginTop: "20px",
+    padding: "12px 20px",
+    fontSize: "16px",
+    backgroundColor: "#28a745",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    transition: "background 0.3s ease, transform 0.2s",
+  },
+  marketButtonHover: {
+    backgroundColor: "#218838",
+    transform: "scale(1.05)",
   },
   chatButton: {
     position: "fixed",

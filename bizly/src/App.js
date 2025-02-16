@@ -12,7 +12,8 @@ import Dashboard from "./components/Dashboard";
 import { AuthContext } from "./AuthContext";
 import StartDesc from "./components/StartDesc";
 import GroqChat from "./components/Chat";
-import TasksPage from "./components/TasksPage"; // Ensure this file exists
+import TasksPage from "./components/TasksPage";
+import Market from "./components/Market";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
@@ -42,6 +43,12 @@ const App = () => {
           path="/tasks"
           element={isLoggedIn ? <TasksPage /> : <Navigate to="/login" />}
         />
+
+        <Route
+          path="/market"
+          element={isLoggedIn ? <Market /> : <Navigate to="/login" />}
+        />
+
       </Routes>
     </Router>
   );

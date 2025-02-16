@@ -1,0 +1,137 @@
+/* Center the chat box */
+.chat-container {
+    width: 90%;
+    max-width: 700px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    margin: 50px auto;
+    text-align: center;
+  }
+  
+  /* Header styling */
+  h2 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Input container (text field + button) */
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+  
+  .chat-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+  }
+  
+  .send-button {
+    padding: 12px 18px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .send-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  /* Output box styling */
+  .output-container {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f9f9f9;
+    max-height: 350px;
+    overflow-y: auto;
+    text-align: left;
+    font-size: 18px; /* Larger text */
+    color: #000; /* Ensure all text is black */
+  }
+  
+  /* Make sure all output text is black and left-aligned */
+  .output-container * {
+    text-align: left;
+    color: #000 !important; /* Force all text to be black */
+  }
+  
+  /* Markdown heading inside output */
+  .output-container h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  /* Bullet points */
+  .output-container ul {
+    padding-left: 25px;
+  }
+  
+  .output-container li {
+    margin-bottom: 8px;
+    line-height: 1.8;
+    font-size: 18px;
+  }
+  
+  /* Bold text inside the output */
+  .output-container strong {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  /* Remove blue color from Markdown links */
+  .output-container a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  
+  /* Keep bullet points black */
+  .output-container ul li::marker {
+    color: #000 !important;
+    font-size: 1.2em;
+  }
+
+  .dashboard-button {
+    background-color: #ff8000;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .dashboard-button:hover {
+    background-color: #b32700;
+    transform: scale(1.05);
+  }
+  
+  .dashboard-button:active {
+    transform: scale(0.95);
+  }
+  

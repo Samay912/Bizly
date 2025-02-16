@@ -56,6 +56,7 @@ export default function GroqChat() {
             cursor: pointer;
             transition: transform 0.3s ease, background 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1050;
           }
 
           .chat-button:hover {
@@ -65,20 +66,21 @@ export default function GroqChat() {
 
           .chat-container {
             position: fixed;
-            bottom: 80px;
+            bottom: 80px; /* Ensures it stays above the button */
             right: 20px;
             width: 350px;
             max-width: 90%;
             background: white;
             border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             font-family: Arial, sans-serif;
-            transform: translateY(20px);
+            transform: translateY(10px);
             opacity: 0;
             transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1049;
           }
 
           .chat-container.open {
@@ -87,7 +89,7 @@ export default function GroqChat() {
           }
 
           .chat-box {
-            height: 300px;
+            height: 320px;
             overflow-y: auto;
             padding: 10px;
             background: #f9f9f9;
@@ -171,9 +173,7 @@ export default function GroqChat() {
             .map((msg, index) => (
               <div
                 key={index}
-                className={`message ${
-                  msg.role === "user" ? "user-message" : "assistant-message"
-                }`}
+                className={`message ${msg.role === "user" ? "user-message" : "assistant-message"}`}
               >
                 {msg.content}
               </div>

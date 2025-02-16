@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"; // Import Recharts components
-import GroqChat from "../components/Chat"; // Import chat component
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"; 
+import GroqChat from "../components/Chat"; 
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -43,12 +43,11 @@ const Dashboard = () => {
 
   const mostImportantTask = getMostImportantTask();
 
-  // Define startup phases in order
   const startupPhases = ["Idea", "MVP", "Launch", "Growth", "Scaling"];
   const currentPhaseIndex = startupPhases.indexOf(user?.startupPosition);
   const progressData = startupPhases.map((phase, index) => ({
     phase,
-    progress: index <= currentPhaseIndex ? (index + 1) * 20 : 0, // Progress in percentage
+    progress: index <= currentPhaseIndex ? (index + 1) * 20 : 0,
   }));
 
   return (
@@ -56,25 +55,46 @@ const Dashboard = () => {
       <button onClick={logout} style={styles.logoutButton}>Logout</button>
       <h1>Welcome, {user?.name}!</h1>
 
-      {/* Two separate boxes for startup details */}
+      {/* Details Section */}
       <div style={styles.detailsContainer}>
         <div style={styles.detailBox}>
           <h3>Startup Description</h3>
-          <p>{user?.startupDescription || "Not available (Check API response)"}</p>
+          <p>{user?.startupDescription || "Not available"}</p>
         </div>
 
         <div style={styles.detailBox}>
           <h3>Current Phase</h3>
-          <p>{user?.startupPosition || "Not available (Check API response)"}</p>
+          <p>{user?.startupPosition || "Not available"}</p>
         </div>
       </div>
+
+      {/* Startup Roadmap */}
+      <h2>Startup Roadmap</h2>
+      {loading ? (
+        <p>Generating your roadmap...</p>
+      ) : (
+        <>
+          {mostImportantTask && (
+            <div
+              style={styles.importantTaskBox}
+              onClick={() => navigate("/tasks")}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1.0)"}
+            >
+              <h3>{mostImportantTask.task} ({mostImportantTask.priority})</h3>
+              <p>{mostImportantTask.description}</p>
+              <span style={styles.hoverIndicator}>Hover for more tasks...</span>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Market Analysis Button */}
       <button onClick={() => navigate("/market")} style={styles.marketButton}>
         Market Analysis
       </button>
 
-      {/* Progress Graph */}
+      {/* Startup Progress Graph */}
       <div style={styles.progressContainer}>
         <h3>Startup Progress</h3>
         <ResponsiveContainer width="100%" height={200}>
@@ -86,23 +106,6 @@ const Dashboard = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
-
-      <h2>Startup Roadmap</h2>
-      {loading ? (
-        <p>Generating your roadmap...</p>
-      ) : (
-        <>
-          {mostImportantTask && (
-            <div
-              style={styles.importantTaskBox}
-              onClick={() => navigate("/tasks")}
-            >
-              <h3>{mostImportantTask.task} ({mostImportantTask.priority})</h3>
-              <p>{mostImportantTask.description}</p>
-            </div>
-          )}
-        </>
-      )}
 
       {/* Floating Chat Button */}
       <button onClick={() => setIsChatOpen(!isChatOpen)} style={styles.chatButton}>
@@ -155,10 +158,14 @@ const styles = {
     boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
     textAlign: "center",
     transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
+    position: "relative",
   },
-  importantTaskBoxHover: {
-    transform: "scale(1.05)",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
+  hoverIndicator: {
+    fontSize: "12px",
+    fontStyle: "italic",
+    color: "#fff",
+    marginTop: "5px",
+    display: "block",
   },
   logoutButton: {
     position: "absolute",
@@ -184,10 +191,6 @@ const styles = {
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     transition: "background 0.3s ease, transform 0.2s",
   },
-  marketButtonHover: {
-    backgroundColor: "#218838",
-    transform: "scale(1.05)",
-  },
   chatButton: {
     position: "fixed",
     bottom: "20px",
@@ -205,7 +208,8 @@ const styles = {
     cursor: "pointer",
     transition: "transform 0.3s ease, background 0.3s",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  },
+    zIndex: 1000,
+  }
 };
 
 export default Dashboard;
